@@ -1,16 +1,143 @@
-<form name="submit-to-google-sheet">
-  <input name="email" type="email" placeholder="Email" required>
-  <button type="submit">Send</button>
+<form action="results.html" method="GET" enctype="multipart/form-data">
+
+    <div>
+
+      <label for="name">Name</label>
+
+      <input type="text" name="name" id="name" required>
+
+  </div>
+
+  <div>
+
+    <label for="email">Email</label>
+
+   
+
+  </div>
+
+  <div>
+
+    <label for="date">Birthdate</label>
+
+    <input type="date" name="date" id="date" min="2019-06-10">
+
+  </div>
+
+  <div>
+
+    Favorite Food
+
+    <div>
+
+      <label for="banana">Banana</label>
+
+      <input type="checkbox" name="banana" id="banana">
+
+    </div>
+
+    <div>
+
+      <label for="apple">Apple</label>
+
+      <input type="checkbox" name="apple" id="apple">
+
+    </div>
+
+  </div>
+
+  <div>
+
+    Gender
+
+    <div>
+
+      <label for="male">Male</label>
+
+      <input type="radio" name="gender" id="male" value="male">
+
+    </div>
+
+    <div>
+
+      <label for="female">Female</label>
+
+      <input type="radio" name="gender" id="female" value="female">
+
+    </div>
+
+  </div>
+
+  <div>
+
+    <label for="eyeColor">Eye Color</label>
+
+    <select name="eyeColor" id="eyeColor" multiple>
+
+      <option value="Green">Green</option>
+
+      <option label="Red" value="Red"></option>
+
+    </select>
+
+  </div>
+
+  <div>
+
+    <label for="bio">Bio</label>
+
+    <textarea id="bio" name="bio"></textarea>
+
+  </div>
+
+  <input type="hidden" name="hidden" value="hi">
+
+  <div>
+
+    <label for="file">File</label>
+
+    <input id="file" type="file" name="file">
+
+  </div>
+
+  <div>
+
+    <label for="phone">Phone</label>
+
+    <input type="tel" name="phone" id="phone">
+
+  </div>
+
+  <div>
+
+    <label for="url">URL</label>
+
+    <input type="url" name="url" id="url">
+
+  </div>
+
+  <div>
+
+    <label for="color">Color</label>
+
+    <input type="color" name="color" id="color">
+
+  </div>
+
+  <div>
+
+    <label>
+
+      Password
+
+      <input type="password" name="password" required>
+
+    </label>
+
+  </div>
+
+  <button type="reset">Reset</button>
+
+  <button type="submit">Submit</button>
+
 </form>
-
-<script>
-  const scriptURL = '<https://script.google.com/a/stripe.com/macros/s/AKfycbxQ52GW--ckrPhqJkKANBWFhwfATdg_u9f7gdWNc26hj_cmR7CP/exec>'
-  const form = document.forms['submit-to-google-sheet']
-
-  form.addEventListener('submit', e => {
-    e.preventDefault()
-    fetch(scriptURL, { method: 'POST', body: new FormData(form)})
-      .then(response => console.log('Success!', response))
-      .catch(error => console.error('Error!', error.message))
-  })
-</script>
