@@ -1,27 +1,83 @@
 <?php
-// Get the name they entered in the form
-// We'll be naming the file this
-$file = $_POST['index.html'];
-// Get the email from the form
-$email = $_POST['email'];
-// We want the file to be a text file right?
-$ex = ".txt";
-// Try to open a file named $file$ex (johndoe.txt for example)
-// Because this file doesn't exist yet the server creates it
-$write = fopen("$file$ex","w");
-// Now open the file up again but this time save the email in it
-fwrite($write,$email);
-// MAKE SURE you close the file!!!
-fclose($write);
-// The folder that this script is in on the server is where the file we just made was saved
-// We can 'rename' it to another folder
-// The folder on the server we want to move it to 
-$data = "../emails/";
-// Now put it all together: This example goes out of the folder we're in and into the folder 'emails'
-// The new 'name' would be this now (../emails/johndoe.txt): So now the file is moved to where we want for storage
-rename ("$file","$data$file$ex");
-// The script is done, send the user to another page (Just read the address below and you'll get it)
-// Its just an example fyi change to what you want
-header('Location: http://YourWebsiteNameHere.com/contactFo…
-exit;
-?>
+//index.php
+
+$error = '';
+$name = '';
+$email = '';
+$subject = '';
+$message = '';
+
+function clean_text($string)
+{
+ $string = trim($string);
+ $string = stripslashes($string);
+ $string = htmlspecialchars($string);
+ return $string;
+}
+
+if(isset($_POST["submit"]))
+{
+ if(empty($_POST["name"]))
+ {
+  $error .= '<p><label class="text-danger">Please Enter your Name</label></p>';
+ }
+ else
+ {
+  $name = clean_text($_POST["name"]);
+  if(!preg_match("/^[a-zA-Z ]*$/",$name))
+  {
+   $error .= '<p><label class="text-danger">Only letters and white space allowed</label></p>';
+  }
+ }
+ if(empty($_POST["email"]))
+ {
+  $error .= '<p><label class="text-danger">Please Enter your Email</label></p>';
+ }
+ else
+ {
+  $email = clean_text($_POST["email"]);
+  if(!filter_var($email, FILTER_VALIDATE_EMAIL))
+  {
+   $error .= '<p><label class="text-danger">Invalid email format</label></p>';
+  }
+ }
+ if(empty($_POST["subject"]))
+ {
+  $error .= '<p><label class="text-danger">Subject is required</label></p>';
+ }
+ else
+ {
+  $subject = clean_text($_POST["subject"]);
+ }
+ if(empty($_POST["message"]))
+ {
+  $error .= '<p><label class="text-danger">Message is required</label></p>';
+ }
+ else
+ {
+  $message = clean_text($_POST["message"]);
+ }
+
+ if($error == '')
+ {
+  $file_open = fopen("contact_data.csv", "a");
+  $no_rows = count(file("contact_data.csv"));
+  if($no_rows > 1)
+  {
+   $no_rows = ($no_rows - 1) + 1;
+  }
+  $form_data = array(
+   'sr_no'  => $no_rows,
+   'name'  => $name,
+   'email'  => $email,
+   'subject' => $subject,
+   'message' => $message
+  );
+  fputcsv($file_open, $form_data);
+  $error = '<label class="text-success">Thank you for contacting us</label>';
+  $name = '';
+  $email = '';
+  $subject = '';
+  $message = '';
+ }
+}
